@@ -12,7 +12,6 @@ use Behat\Gherkin\Node\TableNode;
 
 use Inventory\Entity\Location;
 use Inventory\Entity\Location\ProductInventory;
-use Inventory\Entity\PurchaseOrder\Factory as PurchaseOrderFactory;
 use Inventory\Entity\PurchaseOrder\PurchaseOrder;
 use Inventory\Entity\Product;
 use Inventory\Entity\Product\Supplier as ProductSupplier;
@@ -20,6 +19,7 @@ use Inventory\Entity\Supplier;
 use Inventory\Entity\Taxrate;
 use Inventory\Entity\User;
 use Inventory\Entity\User\Address as SupplierAddress;
+use Inventory\Services\PurchaseOrderService;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -63,7 +63,7 @@ class FeatureContext implements Context
     private $suppliers;
 
     /**
-     * @var PurchaseOrderFactory
+     * @var PurchaseOrderService
      */
     private $factory;
 
@@ -157,7 +157,7 @@ class FeatureContext implements Context
      */
     public function iCreateAPurchaseOrder()
     {
-        $factory = new PurchaseOrderFactory;
+        $factory = new PurchaseOrderService;
 
         $factory->setShippingLocation($this->location)
             ->setBillingLocation($this->userLocation)
@@ -357,7 +357,7 @@ class FeatureContext implements Context
      */
     public function iCreatePurchaseOrders()
     {
-        $factory = new PurchaseOrderFactory();
+        $factory = new PurchaseOrderService();
         $factory->setShippingLocation($this->location)
             ->setBillingLocation($this->userLocation)
             ->addProducts($this->products)

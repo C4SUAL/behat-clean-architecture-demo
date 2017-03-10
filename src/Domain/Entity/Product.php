@@ -3,6 +3,7 @@
 namespace Inventory\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Inventory\Entity\Product\Supplier as ProductSupplier;
 
 class Product {
 
@@ -661,7 +662,7 @@ class Product {
      * Set baseUom (Standard Stock Unit)
      *
      * @param integer $baseUom
-     * @return Supplier
+     * @return Product
      */
     public function setBaseUom($baseUom)
     {
@@ -765,7 +766,7 @@ class Product {
     /**
      * Return the primary supplier for a Product, or the first if only one
      *
-     * @return Inventory\Entity\Product\Supplier $primary product supplier
+     * @return ProductSupplier primary product supplier
      */
     public function getPrimarySupplier() {
         if ($this->suppliers->count() > 1) {

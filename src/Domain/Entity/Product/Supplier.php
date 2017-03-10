@@ -2,6 +2,8 @@
 
 namespace Inventory\Entity\Product;
 
+use Inventory\Entity\Product;
+
 class Supplier
 {
     /**
@@ -10,13 +12,13 @@ class Supplier
 
     /**
      *
-     * @var Inventory\Entity\Product
+     * @var Product
      */
     protected $product;
 
     /**
      *
-     * @var Inventory\Entity\Supplier
+     * @var \Inventory\Entity\Supplier
      */
     protected $supplier;
 

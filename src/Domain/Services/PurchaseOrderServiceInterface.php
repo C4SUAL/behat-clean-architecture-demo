@@ -1,10 +1,10 @@
 <?php
 
-namespace Inventory\Entity\PurchaseOrder;
+namespace Inventory\Services;
 
 use Inventory\Entity\Location;
 
-interface FactoryInterface
+interface PurchaseOrderServiceInterface
 {
     public function create();
 

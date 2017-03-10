@@ -1,28 +1,32 @@
 <?php
 
-namespace Inventory\Entity\PurchaseOrder;
+namespace Inventory\Services;
 
+use Inventory\Entity\PurchaseOrder\Address;
+use Inventory\Entity\PurchaseOrder\AddressType;
+use Inventory\Entity\PurchaseOrder\Item;
 use Inventory\Entity\Supplier;
 use Inventory\Entity\Location;
 use Inventory\Entity\Product;
+use Inventory\Entity\PurchaseOrder\PurchaseOrder;
 use Doctrine\Common\Collections\ArrayCollection;
 use Inventory\Entity\PurchaseOrder\Address as PurchaseOrderAddress;
 use Inventory\Entity\PurchaseOrder\Exception as PurchaseOrderException;
 
-class Factory implements FactoryInterface
+class PurchaseOrderService implements PurchaseOrderServiceInterface
 {
     /**
-     * @var ArrayCollection
+     * @var PurchaseOrder[]
      */
     protected $purchaseOrders;
 
     /**
-     * @var ArrayCollection
+     * @var Product[]
      */
     protected $products;
 
     /**
-     * @var ArrayCollection
+     * @var Supplier[]
      */
     protected $suppliers;
 
@@ -37,16 +41,6 @@ class Factory implements FactoryInterface
     protected $billingLocation;
 
     /**
-     * @var
-     */
-    protected $objectManager;
-
-    /**
-     * @var
-     */
-    protected $serviceManager;
-
-    /**
      * array
      */
     protected $messages;
@@ -55,6 +49,11 @@ class Factory implements FactoryInterface
      * @var bool
      */
     protected $itemQtysCalculated;
+
+    /**
+     * @var Location
+     */
+    protected $location;
 
     /**
      * Factory constructor.
@@ -227,7 +226,7 @@ class Factory implements FactoryInterface
         $address = new PurchaseOrderAddress(new AddressType(AddressType::SUPPLIER));
 
         // Automatically set supplier address to the supplier's primary address
-        /** @var \Inventory\User\Address $supplierAddress */
+        /** @var \Inventory\Entity\User\Address $supplierAddress */
         $supplierAddress = $supplier->getUser()->getPrimaryAddress();
 
         if ($supplierAddress) {
@@ -261,8 +260,9 @@ class Factory implements FactoryInterface
      * We must calculate order qty at the PurchaseOrder level because we need to know the ship-to location and supplier
      * for stock and order params
      *
-     * @throws \Exception
-     * @return PurchaseOrder
+     * @param PurchaseOrder $purchaseOrder
+     * @return void
+     * @throws PurchaseOrderException
      */
     protected function calculateItemsQty(PurchaseOrder $purchaseOrder)
     {
@@ -298,7 +298,7 @@ class Factory implements FactoryInterface
                 ));
             }
 
-            // TODO: refactor to use Respository\Location\Stock::getStockQuantity()
+            /* TODO: refactor to use Respository\Location\Stock::getStockQuantity() */
             $curStockLevel = $orderItem->getProduct()->getStockLevels()->first();
 
             // Default to 0 if no stock data present
@@ -326,8 +326,10 @@ class Factory implements FactoryInterface
 
     /**
      * Add products to a purchase order and turns them into purchase order items
+     * @param PurchaseOrder $purchaseOrder
      * @param array|ArrayCollection $products
      * @return $this
+     * @throws PurchaseOrderException
      */
     protected function attachProducts(PurchaseOrder $purchaseOrder, $products)
     {
