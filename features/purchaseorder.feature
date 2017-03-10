@@ -142,6 +142,8 @@ Feature: Create Purchase Order
       Hull
       HU1 3RQ
       """
+    And the status should be "Pending"
+
   Scenario: try to create a purchase order when the product has no primary supplier
     Given that I have product "Shotgun ammo"
     When I create a purchase order

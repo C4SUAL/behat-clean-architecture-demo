@@ -12,6 +12,7 @@ use Inventory\Entity\PurchaseOrder\PurchaseOrder;
 use Doctrine\Common\Collections\ArrayCollection;
 use Inventory\Entity\PurchaseOrder\Address as PurchaseOrderAddress;
 use Inventory\Entity\PurchaseOrder\Exception as PurchaseOrderException;
+use Inventory\Repositories\PurchaseOrder\PurchaseOrderStatusRepositoryInterface;
 
 class PurchaseOrderService implements PurchaseOrderServiceInterface
 {
@@ -56,14 +57,20 @@ class PurchaseOrderService implements PurchaseOrderServiceInterface
     protected $location;
 
     /**
+     * @var PurchaseOrderStatusRepositoryInterface
+     */
+    protected $statusRepository;
+
+    /**
      * Factory constructor.
      */
-    public function __construct()
+    public function __construct(PurchaseOrderStatusRepositoryInterface $statusRepository)
     {
         $this->purchaseOrders = new ArrayCollection();
         $this->products = new ArrayCollection();
         $this->suppliers = new ArrayCollection();
         $this->itemQtysCalculated = false;
+        $this->statusRepository = $statusRepository;
     }
 
     /**
@@ -134,8 +141,9 @@ class PurchaseOrderService implements PurchaseOrderServiceInterface
                 $purchaseOrder->setTerms($supplier->getTerms());
                 // $this->setNumber($this->requestNumber());
 
-                // TODO: set status
-                // Need entity manager..
+                // set pending status
+                $pendingStatus = $this->statusRepository->find(1);
+                $purchaseOrder->setStatus($pendingStatus);
 
                 $this->purchaseOrders->add($purchaseOrder);
             }

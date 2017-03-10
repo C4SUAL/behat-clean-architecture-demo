@@ -19,6 +19,8 @@ use Inventory\Entity\Supplier;
 use Inventory\Entity\Taxrate;
 use Inventory\Entity\User;
 use Inventory\Entity\User\Address as SupplierAddress;
+use Inventory\Entity\PurchaseOrder\Status as PurchaseOrderStatus;
+use Inventory\Repositories\PurchaseOrder\PurchaseOrderStatusRepositoryInterface;
 use Inventory\Services\PurchaseOrderService;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -89,6 +91,8 @@ class FeatureContext implements Context
         $this->products = new ArrayCollection;
         $this->suppliers = new ArrayCollection;
         $this->purchaseOrders = new ArrayCollection;
+
+        $this->prophet = new Prophecy\Prophet();
     }
 
     /**
@@ -157,7 +161,7 @@ class FeatureContext implements Context
      */
     public function iCreateAPurchaseOrder()
     {
-        $factory = new PurchaseOrderService;
+        $factory = $this->createService();
 
         $factory->setShippingLocation($this->location)
             ->setBillingLocation($this->userLocation)
@@ -357,7 +361,7 @@ class FeatureContext implements Context
      */
     public function iCreatePurchaseOrders()
     {
-        $factory = new PurchaseOrderService();
+        $factory = $this->createService();
         $factory->setShippingLocation($this->location)
             ->setBillingLocation($this->userLocation)
             ->addProducts($this->products)
@@ -550,5 +554,49 @@ class FeatureContext implements Context
     public function purchaseOrderCountShouldBe($count)
     {
         assertEquals($count, $this->purchaseOrders->count(), 'Purchase order count does not match expected');
+    }
+
+    /**
+     * @Then the status should be :expected
+     */
+    public function theStatusShouldBe($expected)
+    {
+        $status = $this->purchaseOrder->getStatus();
+
+        assertInstanceOf(
+            \Inventory\Entity\PurchaseOrder\Status::class,
+            $status
+        );
+
+        assertEquals(
+            $expected,
+            $status->getName(),
+            "Statuses do not match"
+        );
+    }
+
+    /**
+     * @return PurchaseOrderService
+     */
+    protected function createService()
+    {
+        $statusRepository = $this->prophet->prophesize(PurchaseOrderStatusRepositoryInterface::class);
+
+        $factory = new PurchaseOrderService($statusRepository->reveal());
+
+        $statusRepository->find(1)->willReturn($this->createPendingStatus());
+
+        return $factory;
+    }
+
+    /**
+     * @return PurchaseOrderStatus
+     */
+    protected function createPendingStatus()
+    {
+        $status = new PurchaseOrderStatus();
+        $status->setId(1);
+        $status->setName('Pending');
+        return $status;
     }
 }
