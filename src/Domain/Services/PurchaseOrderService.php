@@ -70,7 +70,7 @@ class PurchaseOrderService implements PurchaseOrderServiceInterface
      * Loop over products and organise into groups by supplier.
      * Creates one purchase order for each supplier
      */
-    public function create()
+    public function createPurchaseOrders()
     {
         // Hint: Dealing with Product\Supplier entities
 

@@ -162,7 +162,7 @@ class FeatureContext implements Context
         $factory->setShippingLocation($this->location)
             ->setBillingLocation($this->userLocation)
             ->addProducts([$this->product])
-            ->create();
+            ->createPurchaseOrders();
 
         $this->factory = $factory;
 
@@ -361,7 +361,7 @@ class FeatureContext implements Context
         $factory->setShippingLocation($this->location)
             ->setBillingLocation($this->userLocation)
             ->addProducts($this->products)
-            ->create();
+            ->createPurchaseOrders();
         $this->purchaseOrders = $factory->getPurchaseOrders();
     }
 

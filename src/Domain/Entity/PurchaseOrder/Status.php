@@ -6,44 +6,21 @@ class Status
 {
 
     /**
-     *
      * @var integer
-     * @ORM\Column(type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Inventory\DBAL\Generator\Sequence")
      */
     protected $id;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=150, nullable=false)
      */
     protected $name;
 
     /**
      *
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
     protected $active;
 
-    /**
-     * @ORM\PrePersist
-     */
-    public function prePersist() {
-        if (!($this->addDate instanceof \DateTime)) {
-            $this->addDate = new \DateTime();
-        }
-        $this->modifiedDate = new \DateTime();
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function preUpdate() {
-        $this->modifiedDate = new \DateTime();
-    }
 
     public function getId() {
         return $this->id;
@@ -57,7 +34,7 @@ class Status
      * Set name
      *
      * @param string $name
-     * @return ShippingMethod
+     * @return Status
      */
     public function setName($name)
     {
@@ -80,7 +57,7 @@ class Status
      * Set active
      *
      * @param boolean $active
-     * @return ShippingMethod
+     * @return Status
      */
     public function setActive($active)
     {

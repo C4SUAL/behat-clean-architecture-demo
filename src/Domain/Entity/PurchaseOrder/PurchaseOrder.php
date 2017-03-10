@@ -174,24 +174,6 @@ class PurchaseOrder
         $this->items = new ArrayCollection();
     }
 
-    /**
-     * @ORM\PrePersist
-     */
-    public function prePersist()
-    {
-        $this->addDate = $this->modifiedDate = new \DateTime;
-        $this->calculateTotals();
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function beforeUpdate()
-    {
-        $this->modifiedDate = new \DateTime;
-        $this->calculateTotals();
-    }
-
     public function getId()
     {
         return $this->id;

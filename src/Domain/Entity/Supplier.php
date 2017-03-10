@@ -2,9 +2,7 @@
 
 namespace Inventory\Entity;
 
-use Inventory\Entity\Product\Supplier as ProductSupplier;
 use Doctrine\Common\Collections\ArrayCollection;
-use Zend\XmlRpc\Value\DateTime;
 
 class Supplier
 {
@@ -21,22 +19,22 @@ class Supplier
     private $creditLimit;
 
     /**
-     * @var Inventory\Entity\User
+     * @var User
      */
     private $user;
 
     /**
-     * @var Inventory\Entity\Product\Supplier
+     * @var \Inventory\Entity\Product\Supplier[]
      */
     protected $products;
 
     /**
-     * @var datetime
+     * @var \DateTime
      */
     protected $addDate;
 
     /**
-     * @var datetime
+     * @var \DateTime
      */
     protected $modifiedDate;
 
@@ -233,6 +231,9 @@ class Supplier
         return $this->products;
     }
 
+    /**
+     * @param \Inventory\Entity\Product\Supplier[] $productSuppliers
+     */
     public function addProducts($productSuppliers) {
         foreach ($productSuppliers as $productSupplier) {
             $productSupplier->setSupplier($this);
@@ -240,6 +241,9 @@ class Supplier
         }
     }
 
+    /**
+     * @param \Inventory\Entity\Product\Supplier[] $productSuppliers
+     */
     public function removeProducts($productSuppliers) {
         foreach ($productSuppliers as $productSupplier) {
             $productSupplier->setSupplier(null);
