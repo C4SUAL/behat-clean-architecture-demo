@@ -37,17 +37,17 @@ class User
     protected $password;
 
     /**
-     * @var datetime
+     * @var \DateTime
      */
     protected $lastLoginDate;
 
     /**
-     * @var datetime
+     * @var \DateTime
      */
     protected $modifiedDate;
 
     /**
-     * @var datetime
+     * @var \DateTime
      */
     protected $registerDate;
 

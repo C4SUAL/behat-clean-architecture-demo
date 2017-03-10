@@ -59,14 +59,14 @@ class PurchaseOrder
 
     /**
      *
-     * @var datetime
+     * @var \DateTime
      * @ORM\Column(type="datetime",nullable=true)
      */
     protected $orderDate;
 
     /**
      *
-     * @var datetime
+     * @var \DateTime
      * @ORM\Column(type="datetime",nullable=true)
      */
     protected $deliveryDate;
@@ -110,14 +110,14 @@ class PurchaseOrder
 
     /**
      *
-     * @var datetime
+     * @var \DateTime
      * @ORM\Column(type="datetime", nullable=false)
      */
     protected $modifiedDate;
 
     /**
      *
-     * @var datetime
+     * @var \DateTime
      * @ORM\Column(type="datetime", nullable=false)
      */
     protected $addDate;

@@ -53,19 +53,19 @@ class Product {
     protected $active;
 
     /**
-     * @var datetime
+     * @var \DateTime
      */
     protected $addDate;
 
     /**
-     * @var datetime
+     * @var \DateTime
      */
     protected $modifiedDate;
 
     /**
      * @var string
      */
-    protected $recieptName;
+    protected $receiptName;
 
     /**
      * @var int
@@ -235,8 +235,8 @@ class Product {
         return $this->active;
     }
 
-    public function getRecieptName() {
-        return $this->recieptName;
+    public function getReceiptName() {
+        return $this->receiptName;
     }
 
     public function setActive($active) {
@@ -350,8 +350,8 @@ class Product {
         $this->brand = $brand;
     }
 
-    public function setRecieptName($recieptName) {
-        $this->recieptName = $recieptName;
+    public function setReceiptName($receiptName) {
+        $this->receiptName = $receiptName;
     }
 
     public function getItems() {
@@ -555,10 +555,10 @@ class Product {
     }
 
     public function recieptName() {
-        if (trim($this->recieptName) == '') {
+        if (trim($this->receiptName) == '') {
             return strlen($this->name) > 19 ? substr($this->name, 0, 19) : $this->name;
         } else {
-            return $this->recieptName;
+            return $this->receiptName;
         }
     }
 

@@ -41,12 +41,12 @@ class Brand {
     protected $sellProductsOnline;
 
     /**
-     * @var datetime
+     * @var \DateTime
      */
     protected $addDate;
 
     /**
-     * @var datetime
+     * @var \DateTime
      */
     protected $modifiedDate;
 

@@ -39,13 +39,13 @@ class Stock
 
     /**
      *
-     * @var datetime
+     * @var \DateTime
      */
     protected $addDate;
 
     /**
      *
-     * @var datetime
+     * @var \DateTime
      */
     protected $modifiedDate;
 

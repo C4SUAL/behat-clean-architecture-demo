@@ -72,14 +72,14 @@ class Address
 
     /**
      *
-     * @var datetime
+     * @var \DateTime
      * @ORM\Column(type="datetime",nullable=false)
      */
     protected $modifiedDate;
 
     /**
      *
-     * @var datetime
+     * @var \DateTime
      * @ORM\Column(type="datetime",nullable=false)
      */
     protected $addDate;

@@ -29,14 +29,14 @@ class Country
     
     /**
      *
-     * @var datetime
+     * @var \DateTime
      * @ORM\Column(type="datetime",nullable=false)
      */
     protected $addDate;
     
     /**
      *
-     * @var datetime
+     * @var \DateTime
      * @ORM\Column(type="datetime",nullable=false)
      */
     protected $modifiedDate;

@@ -68,7 +68,7 @@ class Location {
     protected $active;
 
     /**
-     * @var datetime
+     * @var \DateTime
      */
     protected $addDate;
 
@@ -78,7 +78,7 @@ class Location {
     protected $reference;
 
     /**
-     * @var datetime
+     * @var \DateTime
      */
     protected $modifiedDate;
 
