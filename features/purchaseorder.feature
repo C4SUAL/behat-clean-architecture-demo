@@ -23,6 +23,13 @@ Feature: Create Purchase Order
       Consett
       DH8 5YH
       """
+    And I have a location:
+      """
+      Test Store
+      St Nicholas Square
+      Newcastle upon Tyne
+      NE1 2TT
+      """
 
   Scenario: low stock threshold has been reached
     Given that I have product "shotgun ammo"

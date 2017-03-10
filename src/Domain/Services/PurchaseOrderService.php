@@ -12,7 +12,8 @@ use Inventory\Entity\PurchaseOrder\PurchaseOrder;
 use Doctrine\Common\Collections\ArrayCollection;
 use Inventory\Entity\PurchaseOrder\Address as PurchaseOrderAddress;
 use Inventory\Entity\PurchaseOrder\Exception as PurchaseOrderException;
-use Inventory\Repositories\PurchaseOrder\PurchaseOrderStatusRepositoryInterface;
+use Inventory\Repositories\LocationStockRepositoryInterface;
+use Inventory\Repositories\PurchaseOrderStatusRepositoryInterface;
 
 class PurchaseOrderService implements PurchaseOrderServiceInterface
 {
@@ -62,15 +63,25 @@ class PurchaseOrderService implements PurchaseOrderServiceInterface
     protected $statusRepository;
 
     /**
-     * Factory constructor.
+     * @var LocationStockRepositoryInterface
      */
-    public function __construct(PurchaseOrderStatusRepositoryInterface $statusRepository)
-    {
+    protected $stockRepository;
+
+    /**
+     * Factory constructor.
+     * @param PurchaseOrderStatusRepositoryInterface $statusRepository
+     * @param LocationStockRepositoryInterface $stockRepository
+     */
+    public function __construct(
+        PurchaseOrderStatusRepositoryInterface $statusRepository,
+        LocationStockRepositoryInterface $stockRepository
+    ) {
         $this->purchaseOrders = new ArrayCollection();
         $this->products = new ArrayCollection();
         $this->suppliers = new ArrayCollection();
         $this->itemQtysCalculated = false;
         $this->statusRepository = $statusRepository;
+        $this->stockRepository = $stockRepository;
     }
 
     /**
@@ -274,6 +285,8 @@ class PurchaseOrderService implements PurchaseOrderServiceInterface
      */
     protected function calculateItemsQty(PurchaseOrder $purchaseOrder)
     {
+        assertInstanceOf(Location::class, $purchaseOrder->getLocation());
+
         if ($this->itemQtysCalculated) {
             return;
         }
@@ -306,8 +319,7 @@ class PurchaseOrderService implements PurchaseOrderServiceInterface
                 ));
             }
 
-            /* TODO: refactor to use Respository\Location\Stock::getStockQuantity() */
-            $curStockLevel = $orderItem->getProduct()->getStockLevels()->first();
+            $curStockLevel = $this->stockRepository->getStock($orderItem->getProduct(), $purchaseOrder->getLocation());
 
             // Default to 0 if no stock data present
             $stockQty = $curStockLevel ? (int)$curStockLevel->getQuantity() : 0;

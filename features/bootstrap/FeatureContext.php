@@ -20,7 +20,8 @@ use Inventory\Entity\Taxrate;
 use Inventory\Entity\User;
 use Inventory\Entity\User\Address as SupplierAddress;
 use Inventory\Entity\PurchaseOrder\Status as PurchaseOrderStatus;
-use Inventory\Repositories\PurchaseOrder\PurchaseOrderStatusRepositoryInterface;
+use Inventory\Repositories\LocationStockRepositoryInterface;
+use Inventory\Repositories\PurchaseOrderStatusRepositoryInterface;
 use Inventory\Services\PurchaseOrderService;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -361,7 +362,22 @@ class FeatureContext implements Context
      */
     public function iCreatePurchaseOrders()
     {
-        $factory = $this->createService();
+        $statusRepository = $this->prophet->prophesize(PurchaseOrderStatusRepositoryInterface::class);
+
+        $stockRepository = $this->prophet->prophesize(LocationStockRepositoryInterface::class);
+
+        $factory = new PurchaseOrderService(
+            $statusRepository->reveal(),
+            $stockRepository->reveal()
+        );
+
+        foreach ($this->products as $product) {
+            $locationStock = new Location\Stock();
+            $locationStock->setProduct($product);
+            $locationStock->setLocation($this->location);
+            $locationStock->setQuantity(100);
+            $stockRepository->getStock($product, $this->location)->willReturn($locationStock);
+        }
         $factory->setShippingLocation($this->location)
             ->setBillingLocation($this->userLocation)
             ->addProducts($this->products)
@@ -582,9 +598,18 @@ class FeatureContext implements Context
     {
         $statusRepository = $this->prophet->prophesize(PurchaseOrderStatusRepositoryInterface::class);
 
-        $factory = new PurchaseOrderService($statusRepository->reveal());
+        $stockRepository = $this->prophet->prophesize(LocationStockRepositoryInterface::class);
+
+        $factory = new PurchaseOrderService(
+            $statusRepository->reveal(),
+            $stockRepository->reveal()
+        );
 
         $statusRepository->find(1)->willReturn($this->createPendingStatus());
+
+        $stockRepository->getStock($this->product, $this->location)->willReturn(
+            $this->product->getStockLevels()->first()
+        );
 
         return $factory;
     }

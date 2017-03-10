@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Inventory\Repositories\PurchaseOrder;
+namespace Inventory\Repositories;
 
 
 interface PurchaseOrderStatusRepositoryInterface
